@@ -11,11 +11,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableCircuitBreaker
 @EnableDiscoveryClient
 @EnableZuulProxy
-@SpringBootApplication(scanBasePackages= {"com.example.itineraryservice"})
+@SpringBootApplication(scanBasePackages= {"com.example.itineraryservice","com.example.itineraryservice.config"})
 public class ItineraryServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ItineraryServiceApplication.class, args);
 	}
-
+	
 }
