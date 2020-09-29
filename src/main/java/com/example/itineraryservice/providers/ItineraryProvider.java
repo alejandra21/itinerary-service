@@ -2,7 +2,10 @@ package com.example.itineraryservice.providers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,48 @@ public class ItineraryProvider {
     private List<Itinerary<String, String>> fallback(String city) {
         return new ArrayList<>();
     }
+    
+    private List<Itinerary<String, String>> convertToItineraries(
+    			String origin,
+				SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths) {
+		
+    	
+    	List<Itinerary<String, String>> itineraries = new ArrayList<>();
+    	GraphPath<String, DefaultWeightedEdge> path;
+    	Itinerary<String, String> itinerary;
+    	Set<String> vertex;
+    	List<String> vertexList;
+    	Long weight;
+    	
+    	if ( shortesPaths == null || shortesPaths.getGraph() == null ) {
+    		return itineraries;
+    	}
+    	
+    	vertex = shortesPaths.getGraph().vertexSet();
+    	
+        for (String destination : vertex) {
+        	
+        	if ( destination.equals(origin) ) {
+        		continue;
+        	}
+        
+        	path = shortesPaths.getPath(destination);
+        	vertexList = path != null ? path.getVertexList(): null;
+        	
+        	if ( vertexList == null ) {
+        		itinerary = new Itinerary<>();
+        		itinerary.setOriginDestination(origin,destination);
+        	}
+        	else {
+            	weight = (long) shortesPaths.getWeight(destination);
+            	itinerary = new Itinerary<>(origin,destination,vertexList,weight);
+        	}
+        	
+        	itineraries.add(itinerary);
+         }
+        
+		return itineraries;
+	}
 	
 	public List<Itinerary<String, String>> getItinerariesSortedByTimeFrom(String city) {
 		
@@ -35,8 +80,10 @@ public class ItineraryProvider {
     	
     	List<CityDto> cities = cityProvider.getCities();
     	DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph = graphProvider.convertToWeightedMultigraph(cities);
+    	SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths = graphProvider.dijkstraShortestPath(city,multiGraph);
     	
-    	return new ArrayList<>();
+    	return convertToItineraries(city,shortesPaths);
+    	
 	}
 
 	@HystrixCommand(fallbackMethod = "fallback")

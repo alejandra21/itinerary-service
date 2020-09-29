@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.springframework.stereotype.Component;
@@ -69,6 +71,12 @@ public class GraphProvider {
 			
 		}
 		
+	}
+
+	public SingleSourcePaths<String, DefaultWeightedEdge> dijkstraShortestPath( String origin,
+																				DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph) {
+        DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultWeightedEdge>(multiGraph);
+    	return dijkstraShortestPath.getPaths(origin);
 	}
 
 }
