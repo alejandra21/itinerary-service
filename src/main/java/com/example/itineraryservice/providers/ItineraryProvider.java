@@ -70,6 +70,7 @@ public class ItineraryProvider {
 		return itineraries;
 	}
 	
+    @HystrixCommand(fallbackMethod = "fallback")
 	public List<Itinerary<String, String>> getItinerariesSortedByTimeFrom(String city) {
 		
     	CityDto cityDto = cityProvider.getCityByName(city);
@@ -88,7 +89,18 @@ public class ItineraryProvider {
 
 	@HystrixCommand(fallbackMethod = "fallback")
 	public List<Itinerary<String, String>> getItinerariesSortedByConnectionsFrom(String city) {
-		return new ArrayList<>();
+    	CityDto cityDto = cityProvider.getCityByName(city);
+    	   
+    	if ( cityDto == null || cityDto.getConnections() == null || cityDto.getConnections().isEmpty() ) {
+    		return new ArrayList<>();
+    	}
+    	
+    	List<CityDto> cities = cityProvider.getCities();
+    	DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph = graphProvider.convertToWeightedMultigraph(cities);
+    	SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths = graphProvider.bfsShortestPath(city,multiGraph);
+    	
+    	return convertToItineraries(city,shortesPaths);
+    	
 	}
 
 }

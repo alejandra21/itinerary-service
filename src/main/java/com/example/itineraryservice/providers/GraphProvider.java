@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
+import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
@@ -75,8 +76,15 @@ public class GraphProvider {
 
 	public SingleSourcePaths<String, DefaultWeightedEdge> dijkstraShortestPath( String origin,
 																				DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph) {
-        DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<String, DefaultWeightedEdge>(multiGraph);
+        DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(multiGraph);
     	return dijkstraShortestPath.getPaths(origin);
+	}
+
+	public SingleSourcePaths<String, DefaultWeightedEdge> bfsShortestPath(String origin,
+			DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph) {
+		
+		BFSShortestPath<String, DefaultWeightedEdge> bfs = new BFSShortestPath<>(multiGraph);
+	    return bfs.getPaths(origin);
 	}
 
 }

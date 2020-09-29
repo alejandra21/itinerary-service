@@ -18,10 +18,6 @@ public class ItineraryController {
 	@Autowired
 	ItineraryProvider itineraryProvider;
 
-    private List<Itinerary<String,String>> fallback() {
-        return new ArrayList<>();
-    }
-
     @GetMapping("/itinerary-time")
     @CrossOrigin
     public List<Itinerary<String,String>> getItinerariesSortedByTime(@RequestParam(name = "city") String city) {

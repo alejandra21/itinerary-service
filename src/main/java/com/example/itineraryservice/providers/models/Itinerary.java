@@ -18,7 +18,7 @@ public class Itinerary<T,V> {
 	private Long time = 0L;
 	
 	public Integer getSteps() {
-		return path.size();
+		return path.isEmpty() ? 0 : path.size() - 1;
 	}
 	
 	public void setOriginDestination(T origin,T destination) {
