@@ -1,39 +1,38 @@
 package com.example.itineraryservice.controllers;
 
-import org.springframework.cloud.openfeign.FeignClient;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.example.itineraryservice.providers.ItineraryProvider;
+import com.example.itineraryservice.providers.models.Itinerary;
 
 @RestController
 public class ItineraryController {
-
-	@FeignClient("city-service")
-	interface CityClient {
-	    @GetMapping(value = "/bye")
-	    @CrossOrigin
-	    String getBye();    
-	}
 	
-    private final CityClient cityClient;
+	@Autowired
+	ItineraryProvider itineraryProvider;
 
-    public ItineraryController(CityClient cityClient) {
-        this.cityClient = cityClient;
+    private List<Itinerary<String,String>> fallback() {
+        return new ArrayList<>();
     }
 
-    private String fallback() {
-        return null;
-    }
-
-    @GetMapping("/get-bye")
+    @GetMapping("/itinerary-time")
     @CrossOrigin
-    @HystrixCommand(fallbackMethod = "fallback")
-    public String getBye() {
-        return cityClient.getBye();
+    public List<Itinerary<String,String>> getItinerariesSortedByTime(@RequestParam(name = "city") String city) {
+        return itineraryProvider.getItinerariesSortedByTimeFrom(city);
     }
 
+    @GetMapping("/itinerary-steps")
+    @CrossOrigin
+    public List<Itinerary<String,String>> getItinerariesSortedByConnections(@RequestParam(name = "city") String city) {
+        return itineraryProvider.getItinerariesSortedByConnectionsFrom(city);
+    }
 	
 	
 }
