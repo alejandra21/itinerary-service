@@ -10,6 +10,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.example.itineraryservice.providers.models.CityDto;
 import com.example.itineraryservice.providers.models.Itinerary;
@@ -114,6 +115,10 @@ public class ItineraryProvider {
 	public List<Itinerary<String, String>> getItineraries(String city, SortEnum sort) {
 		
 		log.info(String.format("We are going to find the itinerary of %s BY : %s ", city, sort.getId()) );
+		
+		if( StringUtils.isEmpty(city) ) {
+			return new ArrayList<>();
+		}
 		
 		switch(sort) {
 		  case TIME:
