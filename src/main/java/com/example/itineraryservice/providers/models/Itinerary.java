@@ -3,6 +3,8 @@ package com.example.itineraryservice.providers.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.itineraryservice.utilities.Utilities;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +27,15 @@ public class Itinerary<T,V> {
 		this.origin = origin;
 		this.destination = destination;
 	}
+	
+	public String getTotalTime() {
+		
+		if ( this.time <= 0 ) {
+			return "-";
+		}
+		
+		return Utilities.secondsToHourMinSeconds(this.time);
+		
+	}
+	
 }

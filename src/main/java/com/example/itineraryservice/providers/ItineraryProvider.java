@@ -31,6 +31,7 @@ public class ItineraryProvider {
     
     private List<Itinerary<String, String>> convertToItineraries(
     			String origin,
+    			Boolean includeWeight,
 				SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths) {
 		
     	
@@ -61,7 +62,7 @@ public class ItineraryProvider {
         		itinerary.setOriginDestination(origin,destination);
         	}
         	else {
-            	weight = (long) shortesPaths.getWeight(destination);
+            	weight = includeWeight ? (long) shortesPaths.getWeight(destination) : -1;
             	itinerary = new Itinerary<>(origin,destination,vertexList,weight);
         	}
         	
@@ -83,8 +84,8 @@ public class ItineraryProvider {
     	List<CityDto> cities = cityProvider.getCities();
     	DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph = graphProvider.convertToWeightedMultigraph(cities);
     	SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths = graphProvider.dijkstraShortestPath(city,multiGraph);
-    	
-    	return convertToItineraries(city,shortesPaths);
+    	Boolean includeWeight = true;
+    	return convertToItineraries(city,includeWeight,shortesPaths);
     	
 	}
 
@@ -99,8 +100,8 @@ public class ItineraryProvider {
     	List<CityDto> cities = cityProvider.getCities();
     	DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph = graphProvider.convertToWeightedMultigraph(cities);
     	SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths = graphProvider.bfsShortestPath(city,multiGraph);
-    	
-    	return convertToItineraries(city,shortesPaths);
+    	Boolean includeWeight = false;
+    	return convertToItineraries(city,includeWeight,shortesPaths);
     	
 	}
 
