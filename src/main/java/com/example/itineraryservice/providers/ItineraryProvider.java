@@ -16,7 +16,10 @@ import com.example.itineraryservice.providers.models.Itinerary;
 import com.example.itineraryservice.providers.models.SortEnum;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class ItineraryProvider {
 
 	@Autowired
@@ -31,7 +34,7 @@ public class ItineraryProvider {
     
     private List<Itinerary<String, String>> convertToItineraries(
     			String origin,
-    			Boolean includeWeight,
+    			boolean includeWeight,
 				SingleSourcePaths<String, DefaultWeightedEdge> shortesPaths) {
 		
     	
@@ -43,6 +46,7 @@ public class ItineraryProvider {
     	Long weight;
     	
     	if ( shortesPaths == null || shortesPaths.getGraph() == null ) {
+    		log.info(String.format("The city: %s does not have a shortest path to other cities", origin) );
     		return itineraries;
     	}
     	
@@ -78,6 +82,7 @@ public class ItineraryProvider {
     	CityDto cityDto = cityProvider.getCityByName(city);
    
     	if ( cityDto == null || cityDto.getConnections() == null || cityDto.getConnections().isEmpty() ) {
+    		log.info(String.format("The city: %s is not available in city-service, or does not have connections", city) );
     		return new ArrayList<>();
     	}
     	
@@ -94,6 +99,7 @@ public class ItineraryProvider {
     	CityDto cityDto = cityProvider.getCityByName(city);
     	   
     	if ( cityDto == null || cityDto.getConnections() == null || cityDto.getConnections().isEmpty() ) {
+    		log.info(String.format("The city: %s is not available in city-service, or does not have connections", city) );
     		return new ArrayList<>();
     	}
     	
@@ -106,6 +112,8 @@ public class ItineraryProvider {
 	}
 
 	public List<Itinerary<String, String>> getItineraries(String city, SortEnum sort) {
+		
+		log.info(String.format("We are going to find the itinerary of %s BY : %s ", city, sort.getId()) );
 		
 		switch(sort) {
 		  case TIME:

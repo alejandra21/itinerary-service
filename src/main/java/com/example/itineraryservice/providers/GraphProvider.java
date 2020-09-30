@@ -14,27 +14,32 @@ import org.springframework.stereotype.Component;
 import com.example.itineraryservice.providers.models.CityDto;
 import com.example.itineraryservice.providers.models.ConnectionsDto;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class GraphProvider {
 
 	public DirectedWeightedMultigraph<String, DefaultWeightedEdge> convertToWeightedMultigraph(List<CityDto> cities) {
 		
 		if ( cities == null || cities.isEmpty() ) {
+			log.info("It's not possible the convertion because there are not cities");
 			return null;
 		}
 		
-		Set<String> vertexes = new HashSet<>();
+		
 		DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
-		createGraph(multiGraph,cities,vertexes);
-				
+		createGraph(multiGraph,cities);
+		
+		log.info(String.format("This is the graph: %s", multiGraph.toString()));
 		return multiGraph;
 	}
 
 	private void createGraph(DirectedWeightedMultigraph<String, DefaultWeightedEdge> multiGraph,
-							List<CityDto> cities,
-							Set<String> vertexes) {
+							List<CityDto> cities) {
 		
 		String cityName;
+		Set<String> vertexes = new HashSet<>();
 		
 		for ( CityDto city : cities ) {
 			

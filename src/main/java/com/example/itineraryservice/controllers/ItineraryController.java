@@ -22,6 +22,7 @@ public class ItineraryController {
     @CrossOrigin
     public List<Itinerary<String,String>> getItineraries(@RequestParam(name = "sortedBy") SortEnum sort,
     													 @RequestParam(name = "city") String city) {
+    	
         return itineraryProvider.getItineraries(city,sort);
     }
 	
