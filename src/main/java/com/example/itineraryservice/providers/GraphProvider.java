@@ -67,6 +67,10 @@ public class GraphProvider {
 				vertexes.add(connectionName);
 			}
 			
+			if ( multiGraph.containsEdge(origin, connectionName) ) {
+				continue;
+			}
+			
 			DefaultWeightedEdge edge = multiGraph.addEdge(origin, connectionName);
 	        multiGraph.setEdgeWeight(edge, connection.getTotalTime());
 			
