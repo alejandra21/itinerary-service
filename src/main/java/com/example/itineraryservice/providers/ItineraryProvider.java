@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.itineraryservice.providers.models.CityDto;
 import com.example.itineraryservice.providers.models.Itinerary;
+import com.example.itineraryservice.providers.models.SortEnum;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
@@ -101,6 +102,19 @@ public class ItineraryProvider {
     	
     	return convertToItineraries(city,shortesPaths);
     	
+	}
+
+	public List<Itinerary<String, String>> getItineraries(String city, SortEnum sort) {
+		
+		switch(sort) {
+		  case TIME:
+		    return getItinerariesSortedByTimeFrom(city);
+		  case CONNECTION:
+		    return getItinerariesSortedByConnectionsFrom(city);
+		  default:
+		    return new ArrayList<>();
+		}
+		
 	}
 
 }
