@@ -26,3 +26,14 @@ services:
       - 8080:8080
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+
+  gateway-service:
+    build:
+      context: gateway
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+    env_file:
+      - gateway/config/config.env
