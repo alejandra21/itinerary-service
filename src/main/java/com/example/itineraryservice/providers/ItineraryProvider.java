@@ -33,6 +33,10 @@ public class ItineraryProvider {
         return new ArrayList<>();
     }
     
+    private List<Itinerary<String, String>> principalFallback(String city, SortEnum sort) {
+        return new ArrayList<>();
+    }
+    
     private List<Itinerary<String, String>> convertToItineraries(
     			String origin,
     			boolean includeWeight,
@@ -112,6 +116,7 @@ public class ItineraryProvider {
     	
 	}
 
+	@HystrixCommand(fallbackMethod = "principalFallback")
 	public List<Itinerary<String, String>> getItineraries(String city, SortEnum sort) {
 		
 		log.info(String.format("We are going to find the itinerary of %s BY : %s ", city, sort.getId()) );

@@ -16,7 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -25,7 +24,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.itineraryservice.web.ApiError;
 import com.example.itineraryservice.web.ResponseEntityBuilder;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -157,6 +158,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		ApiError err = new ApiError(LocalDateTime.now(),HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred" ,details);
 		
+		log.error(ex.getMessage(),ex);	
 		return ResponseEntityBuilder.build(err);
 	
 	}
