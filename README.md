@@ -40,7 +40,7 @@ Here are the instructions to run the project (without docker):
 2. Clone **this** repository, in your PC (git clone)
 3. Execute the following command: 
 ```
-cd itinerary-service/config
+cd itinerary-service/
 ./mvnw spring-boot:run
 ```
 3. You will be able to access its api in `http://<itinerary-service>:8080/swagger-ui.html`
