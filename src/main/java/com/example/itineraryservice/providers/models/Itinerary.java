@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.itineraryservice.utilities.Utilities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Itinerary<T,V> {
 	private T origin;
 	private T destination;
 	private List<V> path =  new ArrayList<>();
+	@JsonIgnore
 	private Long time = 0L;
 	
 	public Integer getSteps() {

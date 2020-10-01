@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.example.itineraryservice.exceptions.CustomException;
 import com.example.itineraryservice.providers.models.CityDto;
 import com.example.itineraryservice.providers.models.Itinerary;
 import com.example.itineraryservice.providers.models.SortEnum;
@@ -29,12 +30,14 @@ public class ItineraryProvider {
 	@Autowired
 	private GraphProvider graphProvider;
 	
+	private static final String CITY_SERVICE_ERROR_MESSAGE = "City service is nor available";
+	
     private List<Itinerary<String, String>> fallback(String city) {
-        return new ArrayList<>();
+    	throw new CustomException(CITY_SERVICE_ERROR_MESSAGE);
     }
     
     private List<Itinerary<String, String>> principalFallback(String city, SortEnum sort) {
-        return new ArrayList<>();
+        throw new CustomException(CITY_SERVICE_ERROR_MESSAGE);
     }
     
     private List<Itinerary<String, String>> convertToItineraries(
