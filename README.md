@@ -24,20 +24,21 @@ So, basically, what I am doing in this service is:
 
 This microservice has two modes: the search for shorter routes by time, or the search for shorter routes by steps.
 
-To calculate the shortest paths by time, I used the Dijstrak algorithm. On the other hand, to calculate the shortest paths in steps I used the BFS algorithm.
+To calculate the shortest paths by time, I used the **Dijstrak algorithm**. On the other hand, to calculate the shortest paths in steps I used the **BFS algorithm**.
 
-`The graphs were implemented with the help of [jgrapht](https://jgrapht.org/)`
+The graphs were implemented with the help of [jgrapht](https://jgrapht.org/)
 
 ## Dependencies
 
 * Java 8 or Docker
     
-## Instructions to run the whole project
+## Instructions
 
 Here are the instructions to run the project (without docker):
 
-1. Clone **this** repository, in your PC (git clone)
-2. Execute the following command to export env variable an run the project: 
+1. Go to [Eureka server](https://github.com/alejandra21/discovery-server) and [City server](https://github.com/alejandra21/city-service) and run both projects
+2. Clone **this** repository, in your PC (git clone)
+3. Execute the following command: 
 ```
 cd itinerary-service/config
 ./mvnw spring-boot:run
