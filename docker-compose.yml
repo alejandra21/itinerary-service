@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  discovery:
+    build:
+      context: discovery-server
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+
+  city-service:
+    build:
+      context: city-service
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+    env_file:
+      - city-service/config/config.env
+
+  itinerary-service:
+    build:
+      context: itinerary-service
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+
+  gateway-service:
+    build:
+      context: gateway
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+    env_file:
+      - gateway/config/config.env

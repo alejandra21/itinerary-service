@@ -1,39 +1,33 @@
 package com.example.itineraryservice.controllers;
 
-import org.springframework.cloud.openfeign.FeignClient;
+import java.util.List;
+
+import javax.validation.constraints.Size;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.example.itineraryservice.providers.ItineraryProvider;
+import com.example.itineraryservice.providers.models.Itinerary;
+import com.example.itineraryservice.providers.models.SortEnum;
 
 @RestController
 public class ItineraryController {
-
-	@FeignClient("city-service")
-	interface CityClient {
-	    @GetMapping(value = "/bye")
-	    @CrossOrigin
-	    String getBye();    
-	}
 	
-    private final CityClient cityClient;
-
-    public ItineraryController(CityClient cityClient) {
-        this.cityClient = cityClient;
-    }
-
-    private String fallback() {
-        return null;
-    }
-
-    @GetMapping("/get-bye")
+	@Autowired
+	private ItineraryProvider itineraryProvider;
+    
+    @GetMapping("/itinerary")
     @CrossOrigin
-    @HystrixCommand(fallbackMethod = "fallback")
-    public String getBye() {
-        return cityClient.getBye();
+    public List<Itinerary<String,String>> getItineraries(@RequestParam(name = "sortedBy") SortEnum sort,
+    													 @RequestParam(name = "city") @Size(min = 1) String city) {
+    	
+        return itineraryProvider.getItineraries(city,sort);
+        
     }
-
-	
-	
+    
+		
 }
